@@ -10,7 +10,7 @@ import path from 'path';
 
 const router = Router();
 
-router.use(requireUser);
+// router.use(requireUser);
 
 /** @swagger
  *

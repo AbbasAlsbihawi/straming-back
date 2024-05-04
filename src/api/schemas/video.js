@@ -14,6 +14,15 @@ export default {
   required: ["title", "description", "file","videoUrl"],
   additionalProperties: false,
 };
+export const  videoDataEdit= {
+  type: "object",
+  properties: {
+    title: { type: "string" },
+    description: { type: "string" },  
+  },
+  required: ["title", "description"],
+  additionalProperties: false,
+};
 
 export const videoSchema = {
   type: "object",

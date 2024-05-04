@@ -53,8 +53,7 @@ class VideoService {
   }
 
   static async create(data) {
-    try {
-      console.log("data", data);
+    try { 
       return await Video.create({ data });
     } catch (err) {
       throw new DatabaseError(err);

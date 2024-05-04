@@ -3,7 +3,7 @@ import { Router } from "express";
 import VideoService from "../../services/video.js";
 import { requireUser } from "../middlewares/auth.js";
 import { requireFile, requireSchema, requireValidId } from "../middlewares/validate.js";
-import schema from "../schemas/video.js";
+import schema, { videoDataEdit } from "../schemas/video.js";
 import { upload } from "../middlewares/upload.js";
 import { pathName } from "../middlewares/file.js";
 import fs from 'fs';
@@ -244,7 +244,7 @@ router.get("/play/:videoUrl", async (req, res, next) => {
 router.put(
   "/:id",
   requireValidId,
-  requireSchema(schema),
+  requireSchema(videoDataEdit),
   async (req, res, next) => {
     try {
       const obj = await VideoService.update(req.params.id, req.validatedBody);

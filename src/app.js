@@ -16,6 +16,8 @@ app.use(express.urlencoded({
 }));
 app.use(compression())
 app.use(express.json());
+app.use('/api/v1/image', express.static('public/assets/image'))
 app.use(routes);
+
 
 export default app;
