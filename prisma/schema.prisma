@@ -1,0 +1,82 @@
+// Prisma schema file
+// See https://www.prisma.io/docs/concepts/components/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token       String   @unique @db.VarChar(255)
+  name        String   @db.VarChar(255)
+  lastLoginAt DateTime @default(now())
+  isActive    Boolean  @default(true)
+
+  videos        Video[]
+  hostedParties WatchParty[]
+  partyMembers  PartyMember[]
+  chatMessages  ChatMessage[]
+
+  @@index([email])
+  @@index([token])
+}
+
+model Video {
+  id           Int          @id @default(autoincrement())
+  title        String
+  description  String
+  thumbnailUrl String
+  videoUrl String
+  uploadDate   DateTime     @default(now())
+  user         User         @relation(fields: [userId], references: [id])
+  userId       Int
+  watchParties WatchParty[]
+}
+model File {
+  id           Int          @id @default(autoincrement()) 
+  fileUrl String
+  uploadDate   DateTime     @default(now()) 
+}
+
+model WatchParty {
+  id           Int           @id @default(autoincrement())
+  host         User          @relation(fields: [hostUserId], references: [id])
+  hostUserId   Int
+  video        Video         @relation(fields: [videoId], references: [id])
+  videoId      Int
+  startTime    DateTime
+  endTime      DateTime?
+  partyMembers PartyMember[]
+  chatMessages ChatMessage[]
+}
+
+model PartyMember {
+  id        Int        @id @default(autoincrement())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    Int
+  party     WatchParty @relation(fields: [partyId], references: [id])
+  partyId   Int
+  joinTime  DateTime   @default(now())
+  leaveTime DateTime?
+}
+
+model ChatMessage {
+  id        Int        @id @default(autoincrement())
+  content   String
+  timestamp DateTime   @default(now())
+  party     WatchParty @relation(fields: [partyId], references: [id])
+  partyId   Int
+  user      User       @relation(fields: [userId], references: [id])
+  userId    Int
+}
